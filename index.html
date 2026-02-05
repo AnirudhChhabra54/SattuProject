@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Estimate Generator | Gourav Dangayach</title>
+    <meta name="description" content="Professional Jewellery Estimate Generator">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #4338ca;       /* Indigo 700 */
+            --primary-light: #6366f1; /* Indigo 500 */
+            --accent: #f472b6;        /* Pink 400 */
+            --bg-body: #f8fafc;
+            --surface: #ffffff;
+            --text-main: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --danger: #ef4444;
+            --radius: 12px;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        /* --- Main Layout --- */
+        .app-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            padding: 24px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 { margin: 0; font-size: 1.5rem; font-weight: 700; }
+        header .badge { background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; }
+
+        .content { padding: 24px; }
+
+        /* --- Grid System --- */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+        .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 15px; }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; gap: 15px; }
+            body { padding: 10px; }
+            .content { padding: 15px; }
+        }
+
+        /* --- Form Elements --- */
+        .section-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin: 24px 0 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .section-label i { opacity: 0.7; }
+
+        .input-group label {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background: #f9fafb;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        /* --- Table --- */
+        .table-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        table { width: 100%; border-collapse: collapse; }
+        
+        th {
+            background: #f1f5f9;
+            text-align: left;
+            padding: 12px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-light);
+            font-weight: 700;
+        }
+        
+        td { padding: 8px; border-bottom: 1px solid var(--border); }
+        
+        /* Input inside table */
+        td input {
+            padding: 8px;
+            border: 1px solid transparent;
+            background: transparent;
+        }
+        td input:hover { background: #f8fafc; border-color: #e2e8f0; }
+        td input:focus { background: white; border-color: var(--primary); }
+
+        /* --- Buttons --- */
+        .btn {
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: transform 0.1s;
+        }
+        .btn:active { transform: scale(0.98); }
+
+        .btn-primary { background: var(--primary); color: white; width: 100%; font-size: 1.1rem; }
+        .btn-outline { background: white; border: 1px solid var(--border); color: var(--text-main); font-size: 0.85rem; }
+        .btn-danger { background: #fee2e2; color: var(--danger); width: 32px; height: 32px; padding: 0; border-radius: 50%; }
+        
+        .toolbar {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            justify-content: flex-end;
+        }
+
+        /* --- Old Gold Section --- */
+        .old-gold-card {
+            background: #fff1f2;
+            border: 1px solid #fecdd3;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        /* --- Summary Panel --- */
+        .summary-panel {
+            background: #f8fafc;
+            border: 1px dashed var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem; }
+        .summary-row.total { font-size: 1.3rem; font-weight: 700; color: var(--primary); border-top: 2px solid var(--border); padding-top: 15px; margin-top: 15px; }
+
+        /* --- Print Styles --- */
+        @media print {
+            body { background: white; padding: 0; }
+            .app-container { box-shadow: none; border: none; max-width: 100%; }
+            .no-print, header .badge, .toolbar, .btn, .btn-danger { display: none !important; }
+            header { background: white; color: black; padding: 0 0 20px 0; border-bottom: 2px solid black; }
+            header h1 { color: black; }
+            input, textarea { border: none; padding: 0; background: transparent; font-weight: bold; resize: none; }
+            th { background: #eee !important; color: black; -webkit-print-color-adjust: exact; }
+            .old-gold-card { background: white; border: 1px solid #000; }
+            .summary-panel { background: white; border: 1px solid #000; }
+            /* Hide empty rows in print could be done via JS, but simple CSS helps */
+            ::placeholder { color: transparent; }
+        }
+
+        /* Helper for iPhone inputs */
+        input[type="number"] { -moz-appearance: textfield; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <header>
+        <div>
+            <h1>Estimate Generator</h1>
+            <div style="font-size: 0.9rem; opacity: 0.9;">Gourav Dangayach</div>
+        </div>
+        <div class="badge">v2.0</div>
+    </header>
+
+    <div class="content">
+        
+        <div class="grid-2">
+            <div class="input-group">
+                <label>Customer Name</label>
+                <input type="text" id="custName" placeholder="Enter name" oninput="saveData()">
+            </div>
+            <div class="input-group">
+                <label>Date</label>
+                <input type="date" id="billDate" oninput="saveData()">
+            </div>
+        </div>
+
+        <div class="section-label"><i class="fas fa-chart-line"></i> Today's Rates (per 10g)</div>
+        <div class="grid-2">
+            <div class="input-group">
+                <label>Gold Rate (₹)</label>
+                <input type="number" id="rateGold" placeholder="e.g. 65000" oninput="calc(); saveData();">
+            </div>
+            <div class="input-group">
+                <label>Silver Rate (₹)</label>
+                <input type="number" id="rateSilver" placeholder="e.g. 750" oninput="calc(); saveData();">
+            </div>
+        </div>
+
+        <div class="section-label" style="justify-content: space-between;">
+            <span><i class="fas fa-gem"></i> Items</span>
+            <button class="btn btn-outline no-print" onclick="addItemRow()" style="padding: 5px 10px; font-size: 0.8rem;">+ Add Item</button>
+        </div>
+
+        <div class="table-card">
+            <table id="itemsTable">
+                <thead>
+                    <tr>
+                        <th width="35%">Description</th>
+                        <th width="15%">Weight</th>
+                        <th width="15%">Rate</th>
+                        <th width="15%">Misc</th>
+                        <th width="15%">Total (₹)</th>
+                        <th width="5%" class="no-print"></th>
+                    </tr>
+                </thead>
+                <tbody id="itemsBody">
+                    </tbody>
+            </table>
+        </div>
+
+        <div class="section-label"><i class="fas fa-plus-circle"></i> Direct Addition</div>
+        <div class="grid-2">
+            <div class="input-group">
+                <label>Description (Optional)</label>
+                <input type="text" id="manualDesc" placeholder="e.g. Stone Charges" oninput="saveData()">
+            </div>
+            <div class="input-group">
+                <label>Amount (₹)</label>
+                <input type="number" id="manualAmt" placeholder="0.00" oninput="calc(); saveData();">
+            </div>
+        </div>
+
+        <div class="section-label"><i class="fas fa-exchange-alt"></i> Old Gold / Return</div>
+        <div class="old-gold-card">
+            <div class="grid-4">
+                <div class="input-group">
+                    <label>Item Name</label>
+                    <input type="text" id="oldName" placeholder="Old Chain" oninput="saveData()">
+                </div>
+                <div class="input-group">
+                    <label>Weight (g)</label>
+                    <input type="number" id="oldWeight" placeholder="0.00" oninput="calc(); saveData();">
+                </div>
+                <div class="input-group">
+                    <label>Purity (%)</label>
+                    <input type="number" id="oldPurity" placeholder="e.g. 92" value="100" oninput="calc(); saveData();">
+                </div>
+                <div class="input-group">
+                    <label>Rate (₹)</label>
+                    <input type="number" id="oldRate" placeholder="0.00" oninput="calc(); saveData();">
+                </div>
+            </div>
+            <div style="text-align: right; margin-top: 10px; font-weight: bold; color: var(--danger);">
+                Return Value: <span id="oldTotalDisplay">₹ 0.00</span>
+            </div>
+        </div>
+
+        <div class="summary-panel">
+            <div class="summary-row">
+                <span>Items Subtotal</span>
+                <span id="dispSubtotal">₹ 0.00</span>
+            </div>
+            <div class="summary-row" id="rowManual" style="display:none; color: var(--primary);">
+                <span id="dispManualDesc">Manual Add</span>
+                <span id="dispManualAmt">₹ 0.00</span>
+            </div>
+            <div class="summary-row" style="color: var(--danger);">
+                <span>Less: Old Return</span>
+                <span id="dispOldReturn">- ₹ 0.00</span>
+            </div>
+            <div class="summary-row total">
+                <span>Grand Total</span>
+                <span id="dispGrandTotal">₹ 0.00</span>
+            </div>
+        </div>
+
+        <div class="input-group" style="margin-top: 20px;">
+            <label>Narration / Note</label>
+            <textarea id="narration" rows="2" placeholder="Write any remarks here..." oninput="saveData()"></textarea>
+        </div>
+
+        <div class="toolbar no-print" style="margin-top: 30px; flex-direction: column;">
+            <button class="btn btn-primary" onclick="window.print()">
+                <i class="fas fa-print"></i> Print Invoice
+            </button>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-outline" style="flex: 1;" onclick="copyWhatsApp()">
+                    <i class="fab fa-whatsapp"></i> Copy Summary
+                </button>
+                <button class="btn btn-outline" style="flex: 1; color: var(--danger); border-color: var(--danger);" onclick="clearAll()">
+                    <i class="fas fa-trash"></i> Reset
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // --- Initialization ---
+    document.addEventListener('DOMContentLoaded', () => {
+        // Set Date to Today if empty
+        const dateInput = document.getElementById('billDate');
+        if (!dateInput.value) dateInput.valueAsDate = new Date();
+        
+        loadData(); // Load from LocalStorage
+        if(document.querySelectorAll('#itemsBody tr').length === 0) addItemRow(); // Ensure 1 row
+        calc();
+    });
+
+    // --- Logic ---
+    function addItemRow(data = {}) {
+        const tbody = document.getElementById('itemsBody');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td><input type="text" class="i-desc" placeholder="Item" value="${data.desc || ''}" oninput="calc(); saveData();"></td>
+            <td><input type="number" class="i-wt" placeholder="0.00" value="${data.wt || ''}" oninput="calc(); saveData();"></td>
+            <td><input type="number" class="i-rate" placeholder="0.00" value="${data.rate || ''}" oninput="calc(); saveData();"></td>
+            <td><input type="number" class="i-misc" placeholder="0.00" value="${data.misc || ''}" oninput="calc(); saveData();"></td>
+            <td style="font-weight:600; font-size: 0.9rem;" class="i-total">0.00</td>
+            <td class="no-print" style="text-align:center;">
+                <button class="btn btn-danger" onclick="removeRow(this)">x</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    }
+
+    function removeRow(btn) {
+        if(confirm('Remove this row?')) {
+            btn.closest('tr').remove();
+            calc();
+            saveData();
+        }
+    }
+
+    function calc() {
+        let subtotal = 0;
+
+        // 1. Table Calculation
+        document.querySelectorAll('#itemsBody tr').forEach(row => {
+            const wt = parseFloat(row.querySelector('.i-wt').value) || 0;
+            const rate = parseFloat(row.querySelector('.i-rate').value) || 0;
+            const misc = parseFloat(row.querySelector('.i-misc').value) || 0;
+            
+            const rowTotal = (wt * rate) + misc;
+            row.querySelector('.i-total').innerText = rowTotal.toFixed(2);
+            subtotal += rowTotal;
+        });
+
+        // 2. Manual Add
+        const manAmt = parseFloat(document.getElementById('manualAmt').value) || 0;
+        const manDesc = document.getElementById('manualDesc').value || 'Manual Add';
+        
+        // 3. Old Gold (With Purity Logic)
+        const oldWt = parseFloat(document.getElementById('oldWeight').value) || 0;
+        const oldRate = parseFloat(document.getElementById('oldRate').value) || 0;
+        const oldPurity = parseFloat(document.getElementById('oldPurity').value) || 100;
+        
+        // Formula: Weight * Rate * (Purity / 100)
+        const oldTotal = oldWt * oldRate * (oldPurity / 100);
+
+        // 4. Final Math
+        const grandTotal = subtotal + manAmt - oldTotal;
+
+        // 5. Update UI
+        // Helper formatting function
+        const formatRupee = (num) => '₹ ' + num.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+        document.getElementById('dispSubtotal').innerText = formatRupee(subtotal);
+        
+        // Manual Row Visibility
+        const manRow = document.getElementById('rowManual');
+        if(manAmt > 0) {
+            manRow.style.display = 'flex';
+            document.getElementById('dispManualDesc').innerText = manDesc;
+            document.getElementById('dispManualAmt').innerText = formatRupee(manAmt);
+        } else {
+            manRow.style.display = 'none';
+        }
+
+        document.getElementById('oldTotalDisplay').innerText = formatRupee(oldTotal);
+        document.getElementById('dispOldReturn').innerText = '- ' + formatRupee(oldTotal);
+        document.getElementById('dispGrandTotal').innerText = formatRupee(grandTotal);
+    }
+
+    // --- Persistence (Auto-Save) ---
+    function saveData() {
+        const data = {
+            custName: document.getElementById('custName').value,
+            date: document.getElementById('billDate').value,
+            rateGold: document.getElementById('rateGold').value,
+            rateSilver: document.getElementById('rateSilver').value,
+            manualDesc: document.getElementById('manualDesc').value,
+            manualAmt: document.getElementById('manualAmt').value,
+            oldName: document.getElementById('oldName').value,
+            oldWeight: document.getElementById('oldWeight').value,
+            oldPurity: document.getElementById('oldPurity').value,
+            oldRate: document.getElementById('oldRate').value,
+            narration: document.getElementById('narration').value,
+            items: []
+        };
+
+        document.querySelectorAll('#itemsBody tr').forEach(row => {
+            data.items.push({
+                desc: row.querySelector('.i-desc').value,
+                wt: row.querySelector('.i-wt').value,
+                rate: row.querySelector('.i-rate').value,
+                misc: row.querySelector('.i-misc').value
+            });
+        });
+
+        localStorage.setItem('invoiceData', JSON.stringify(data));
+    }
+
+    function loadData() {
+        const saved = localStorage.getItem('invoiceData');
+        if (saved) {
+            const data = JSON.parse(saved);
+            document.getElementById('custName').value = data.custName || '';
+            document.getElementById('billDate').value = data.date || '';
+            document.getElementById('rateGold').value = data.rateGold || '';
+            document.getElementById('rateSilver').value = data.rateSilver || '';
+            document.getElementById('manualDesc').value = data.manualDesc || '';
+            document.getElementById('manualAmt').value = data.manualAmt || '';
+            document.getElementById('oldName').value = data.oldName || '';
+            document.getElementById('oldWeight').value = data.oldWeight || '';
+            document.getElementById('oldPurity').value = data.oldPurity || '100';
+            document.getElementById('oldRate').value = data.oldRate || '';
+            document.getElementById('narration').value = data.narration || '';
+            
+            // Rebuild rows
+            document.getElementById('itemsBody').innerHTML = '';
+            if (data.items && data.items.length > 0) {
+                data.items.forEach(item => addItemRow(item));
+            }
+        }
+    }
+
+    function clearAll() {
+        if(confirm('Clear all data?')) {
+            localStorage.removeItem('invoiceData');
+            location.reload();
+        }
+    }
+
+    // --- WhatsApp Copy Feature ---
+    function copyWhatsApp() {
+        const name = document.getElementById('custName').value || 'Customer';
+        const total = document.getElementById('dispGrandTotal').innerText;
+        
+        let text = `*Estimate for ${name}*\n`;
+        text += `Date: ${document.getElementById('billDate').value}\n`;
+        text += `------------------\n`;
+        
+        document.querySelectorAll('#itemsBody tr').forEach(row => {
+            const d = row.querySelector('.i-desc').value;
+            const t = row.querySelector('.i-total').innerText;
+            if(d) text += `${d}: ₹${t}\n`;
+        });
+        
+        text += `------------------\n`;
+        text += `*Grand Total: ${total}*\n`;
+        
+        navigator.clipboard.writeText(text).then(() => {
+            alert('Summary copied to clipboard!');
+        });
+    }
+</script>
+
+</body>
+</html>
