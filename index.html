@@ -447,6 +447,145 @@
             * {
                 page-break-inside: avoid !important;
             }
+
+            /* Scale down content to fit one page */
+            .paper-sheet {
+                transform: scale(0.95);
+                transform-origin: top center;
+            }
+        }
+
+        /* --- Mobile Responsive --- */
+        @media screen and (max-width: 768px) {
+            body {
+                padding: 5px;
+            }
+
+            .paper-sheet {
+                width: 100%;
+                min-height: auto;
+                padding: 15px;
+                margin: 0;
+            }
+
+            .screen-controls {
+                position: fixed;
+                bottom: 10px;
+                top: auto;
+                right: 10px;
+                flex-direction: row;
+                gap: 8px;
+            }
+
+            .action-btn {
+                padding: 10px 15px;
+                font-size: 0.85rem;
+            }
+
+            .logo-img {
+                max-width: 100px;
+            }
+
+            .brand-contact {
+                position: static;
+                text-align: center;
+                margin-bottom: 10px;
+            }
+
+            header {
+                margin-bottom: 8px;
+            }
+
+            .rough-estimate-divider {
+                font-size: 1rem;
+                margin: 8px 0;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .v-partition {
+                border-left: none;
+                border-top: 1px solid #e0cda8;
+            }
+
+            th,
+            td {
+                padding: 4px 2px;
+                font-size: 0.75rem;
+            }
+
+            td input {
+                font-size: 0.8rem;
+            }
+
+            .section-title {
+                font-size: 1rem;
+                padding: 6px 10px;
+            }
+
+            .calc-box {
+                width: 100%;
+            }
+
+            .footer {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+
+            .footer>div {
+                text-align: center;
+            }
+
+            .qr-box {
+                width: 100px !important;
+            }
+
+            .terms {
+                font-size: 0.75rem;
+                padding: 8px;
+            }
+
+            .footer-note {
+                font-size: 1rem;
+            }
+        }
+
+        /* --- Mobile Print Optimization --- */
+        @media print {
+            .paper-sheet {
+                transform: scale(0.9);
+                transform-origin: top center;
+                padding: 8px !important;
+            }
+
+            th,
+            td {
+                padding: 3px 2px !important;
+                font-size: 0.7rem !important;
+            }
+
+            .section-title {
+                padding: 4px 8px !important;
+                font-size: 0.9rem !important;
+                margin-bottom: 5px !important;
+            }
+
+            .terms {
+                padding: 6px !important;
+                margin-top: 10px !important;
+            }
+
+            .footer {
+                margin-top: 10px !important;
+            }
+
+            .footer-note {
+                margin-top: 8px !important;
+                padding: 5px !important;
+            }
         }
     </style>
 </head>
