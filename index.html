@@ -22,7 +22,7 @@
         }
 
         @page {
-            size: A5;
+            size: A4;
             margin: 0;
         }
 
@@ -36,18 +36,16 @@
             color: var(--text-dark);
             margin: 0;
             padding: 20px;
-            font-size: 12px;
-            /* Base font reduction for A5 */
+            font-size: 14px;
         }
 
         .paper-sheet {
             background: white;
-            width: 148mm;
-            min-height: 210mm;
-            /* A5 Height */
+            width: 210mm;
+            min-height: 297mm;
+            /* A4 Height */
             margin: 0 auto;
-            padding: 15px;
-            /* Reduced Padding */
+            padding: 30px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             position: relative;
             background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMjAwLCAxODAsIDE1MCwgMC4wNSkiLz48L3N2Zz4=');
@@ -178,7 +176,8 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            border: 2px solid #c5a065;
         }
 
         th {
@@ -186,16 +185,18 @@
             color: #5c4a35;
             font-family: 'Crimson Text', serif;
             font-weight: 700;
-            padding: 10px;
+            padding: 6px 4px;
             text-align: center;
-            border: 1px solid #e6dfd1;
+            border: 1px solid #d4c4a8;
+            font-size: 0.85rem;
         }
 
         td {
-            padding: 8px;
-            border: 1px solid #e6dfd1;
+            padding: 4px 6px;
+            border: 1px solid #d4c4a8;
             text-align: center;
             vertical-align: middle;
+            font-size: 0.9rem;
         }
 
         .desc-col {
@@ -405,6 +406,10 @@
                 display: none !important;
             }
 
+            .hide-in-print {
+                display: none !important;
+            }
+
             input {
                 border-bottom: none !important;
                 padding: 0;
@@ -471,10 +476,6 @@
                     <label>Customer:</label>
                     <input type="text" id="custName" oninput="saveData()">
                 </div>
-                <div class="info-cell">
-                    <label>Mobile:</label>
-                    <input type="tel" id="mobile" oninput="saveData()">
-                </div>
             </div>
             <div class="v-partition" style="display: flex; flex-direction: column;">
                 <div class="info-cell">
@@ -496,10 +497,10 @@
                 <tr>
                     <th width="5%" class="no-print">#</th>
                     <th width="35%">Description</th>
-                    <th width="12%">Weight</th>
+                    <th width="12%">Weight (g)</th>
                     <th width="12%">Rate</th>
                     <th width="12%">Misc</th>
-                    <th width="15%">Amount</th>
+                    <th width="15%">Amount (₹)</th>
                     <th width="5%" class="no-print"></th>
                 </tr>
             </thead>
@@ -510,23 +511,25 @@
         <button class="btn-add no-print" onclick="addMainRow()">+ Add Item Row</button>
 
         <!-- Old Gold Section -->
-        <div class="section-title" style="margin-top: 20px; background: #fff1f1; border-color: #e74c3c;">Old Items
-            Deduction</div>
-        <table id="oldTable">
-            <thead>
-                <tr>
-                    <th width="35%">Description</th>
-                    <th width="15%">Weight</th>
-                    <th width="15%">Purity %</th>
-                    <th width="15%">Rate</th>
-                    <th width="15%">Value</th>
-                    <th width="5%" class="no-print"></th>
-                </tr>
-            </thead>
-            <tbody id="oldBody">
-                <!-- Rows injected via JS -->
-            </tbody>
-        </table>
+        <div id="oldGoldSection">
+            <div class="section-title" style="margin-top: 15px; background: #fff1f1; border-color: #e74c3c;">Old Items
+                Deduction</div>
+            <table id="oldTable">
+                <thead>
+                    <tr>
+                        <th width="35%">Description</th>
+                        <th width="15%">Weight (g)</th>
+                        <th width="15%">Purity %</th>
+                        <th width="15%">Rate</th>
+                        <th width="15%">Value (₹)</th>
+                        <th width="5%" class="no-print"></th>
+                    </tr>
+                </thead>
+                <tbody id="oldBody">
+                    <!-- Rows injected via JS -->
+                </tbody>
+            </table>
+        </div>
         <button class="btn-add no-print" onclick="addOldRow()" style="color: #c0392b; border-color: #e6b0aa;">+ Add Old
             Gold Row</button>
 
@@ -736,6 +739,13 @@
             });
 
             renderStats();
+
+            // Conditional visibility for Old Gold section
+            const hasOldItems = oldRows.some(r => r.desc || r.wt || (parseFloat(r.val) || 0) > 0);
+            const oldGoldSection = document.getElementById('oldGoldSection');
+            if (oldGoldSection) {
+                oldGoldSection.classList.toggle('hide-in-print', !hasOldItems);
+            }
         }
 
         function renderStats() {
@@ -752,7 +762,6 @@
         function saveData() {
             const data = {
                 custName: document.getElementById('custName').value,
-                mobile: document.getElementById('mobile').value,
                 estNo: document.getElementById('estNo').value,
                 mainRows,
                 oldRows
@@ -765,10 +774,6 @@
             if (saved) {
                 const data = JSON.parse(saved);
                 document.getElementById('custName').value = data.custName || '';
-                document.getElementById('mobile').value = data.mobile || '';
-                // If saved has estNo, use it. If not (legacy save), preserve current or generate new? 
-                // Better to trust save or fall back to current value if not present? 
-                // Actually, if we are loading, we want to restore exact state.
                 if (data.estNo) document.getElementById('estNo').value = data.estNo;
 
                 if (data.mainRows && data.mainRows.length) mainRows = data.mainRows;
@@ -785,7 +790,6 @@
                 mainRows = [];
                 oldRows = [];
                 document.getElementById('custName').value = '';
-                document.getElementById('mobile').value = '';
                 document.getElementById('estNo').value = newNo;
 
                 addMainRow();
