@@ -381,36 +381,35 @@
         /* --- Print Media Query --- */
         @media print {
             @page {
-                margin: 0;
                 size: A4;
+                margin: 0;
             }
 
             html,
             body {
+                width: 210mm;
+                height: 297mm;
                 background: white;
-                padding: 0;
                 margin: 0;
-                height: 100%;
+                padding: 0;
                 overflow: hidden;
             }
 
             .paper-sheet {
                 width: 100%;
                 height: 100%;
-                max-height: 100%;
-                box-shadow: none;
                 margin: 0;
-                padding: 8px;
-                overflow: hidden;
+                box-shadow: none;
+                padding: 15mm;
+                /* Standard print margin */
+                background: white !important;
                 page-break-inside: avoid;
-                page-break-after: avoid;
-                transform: scale(0.85);
-                transform-origin: top center;
             }
 
             .screen-controls,
             .btn-add,
-            .no-print {
+            .no-print,
+            .remove-icon {
                 display: none !important;
             }
 
@@ -418,98 +417,65 @@
                 display: none !important;
             }
 
-            input {
-                border-bottom: none !important;
-                padding: 0;
-                font-size: 0.75rem !important;
+            /* Professional Styling tweaks for Print */
+            body {
+                font-family: 'Times New Roman', serif;
+                /* Classic professional font for print, or keep Lato/Crimson */
+                color: #000;
+            }
+
+            .brand-name {
+                color: #000 !important;
+                /* High contrast */
             }
 
             .section-title {
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                background: #efebe4 !important;
-                padding: 4px 8px !important;
-                font-size: 0.85rem !important;
-                margin-bottom: 4px !important;
+                background: #f3f3f3 !important;
+                border-left: 4px solid #333 !important;
+                color: #000 !important;
+                padding: 5px 10px !important;
+            }
+
+            table {
+                border: 1px solid #333 !important;
             }
 
             th {
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                background: #f7e7ce !important;
-                padding: 3px 2px !important;
-                font-size: 0.65rem !important;
+                background: #eee !important;
+                color: #000 !important;
+                border: 1px solid #333 !important;
+                font-weight: bold;
             }
 
             td {
-                padding: 2px !important;
-                font-size: 0.65rem !important;
+                border: 1px solid #ccc !important;
+                color: #000;
+            }
+
+            input {
+                font-weight: 500;
+                color: #000;
             }
 
             .calc-row.total {
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                background: #f3e5d0 !important;
+                background: transparent !important;
+                border-top: 2px solid #000;
             }
 
-            .terms {
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                background: #f5f1ea !important;
-                padding: 5px !important;
-                margin-top: 8px !important;
-                font-size: 0.65rem !important;
-            }
-
-            .terms li {
-                margin-bottom: 1px !important;
-            }
-
-            .footer {
-                margin-top: 8px !important;
-                padding-top: 5px !important;
-            }
-
-            .footer-note {
-                margin-top: 6px !important;
-                padding: 4px !important;
-                font-size: 0.9rem !important;
-            }
-
-            .qr-box {
-                width: 80px !important;
-                height: 80px !important;
-            }
-
-            .info-cell {
-                padding: 4px 8px !important;
+            /* Ensure it fits on one page by reducing spacing if needed */
+            .info-grid {
+                margin-bottom: 10px;
+                border-color: #333 !important;
             }
 
             .rough-estimate-divider {
+                color: #333 !important;
                 margin: 5px 0 !important;
-                font-size: 0.9rem !important;
             }
 
-            header {
-                margin-bottom: 5px !important;
-            }
-
-            .logo-img {
-                max-width: 90px !important;
-            }
-
-            .brand-address {
-                font-size: 0.8rem !important;
-                margin-top: 4px !important;
-            }
-
-            ::-webkit-input-placeholder {
-                color: transparent;
-            }
-
-            /* Prevent page breaks */
-            * {
-                page-break-inside: avoid !important;
+            .rough-estimate-divider::before,
+            .rough-estimate-divider::after {
+                border-bottom: 1px solid #333 !important;
             }
         }
 
@@ -702,7 +668,7 @@
                     <span>Subtotal</span>
                     <span id="txtSubtotal">₹ 0</span>
                 </div>
-                <div class="calc-row">
+                <div class="calc-row" id="oldDeductionRow">
                     <span>Old Items Deduction</span>
                     <span id="txtOldTotal">₹ 0</span>
                 </div>
@@ -902,11 +868,35 @@
 
             renderStats();
 
+
+
             // Conditional visibility for Old Gold section
-            const hasOldItems = oldRows.some(r => r.desc || r.wt || (parseFloat(r.val) || 0) > 0);
+            // Check if any old row has meaningful content
+            const hasOldItems = oldRows.some(r => {
+                const desc = (r.desc || '').trim();
+                const wt = parseFloat(r.wt) || 0;
+                const val = parseFloat(r.val) || 0;
+                return desc.length > 0 || wt > 0 || val > 0;
+            });
+
             const oldGoldSection = document.getElementById('oldGoldSection');
+            const oldDeductionRow = document.getElementById('oldDeductionRow');
             if (oldGoldSection) {
-                oldGoldSection.classList.toggle('hide-in-print', !hasOldItems);
+                // If no items, add 'hide-in-print' class. 
+                // We also might want to visually dim it or indicate it's empty in edit mode, 
+                // but for now, just controlling print visibility is key.
+                if (!hasOldItems) {
+                    oldGoldSection.classList.add('hide-in-print');
+                } else {
+                    oldGoldSection.classList.remove('hide-in-print');
+                }
+            }
+            if (oldDeductionRow) {
+                if (!hasOldItems) {
+                    oldDeductionRow.classList.add('hide-in-print');
+                } else {
+                    oldDeductionRow.classList.remove('hide-in-print');
+                }
             }
         }
 
