@@ -757,17 +757,9 @@
 
             document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('billDateStr').value = todayStr();
-                loadData();
 
-                // If Est No is still default PJ-001 (and not loaded from save), generate a new one
-                // However, loadData handles setting the value if saved.
-                // If loadData DID NOT find a save, we should generate one NOW.
-                const saved = localStorage.getItem('pj_invoice_v1');
-                if (!saved) {
-                    // First run or fresh start
-                    document.getElementById('estNo').value = getNextEstimateNumber();
-                    saveData(); // Save immediately so this number is reserved for this draft
-                }
+                // Always start fresh on page load with a new estimate number
+                document.getElementById('estNo').value = getNextEstimateNumber();
 
                 if (mainRows.length === 0) addMainRow();
                 if (oldRows.length === 0) addOldRow();
@@ -784,12 +776,23 @@
             }
 
             // --- Actions ---
+            const MAX_MAIN_ROWS = 8;
+            const MAX_OLD_ROWS = 3;
+
             function addMainRow(data = {}) {
+                if (mainRows.length >= MAX_MAIN_ROWS) {
+                    alert(`Maximum ${MAX_MAIN_ROWS} items allowed to fit on one page.`);
+                    return;
+                }
                 mainRows.push({ desc: data.desc || '', wt: data.wt || '', rate: data.rate || '', misc: data.misc || '', amt: data.amt || '', id: Date.now() });
                 render();
             }
 
             function addOldRow(data = {}) {
+                if (oldRows.length >= MAX_OLD_ROWS) {
+                    alert(`Maximum ${MAX_OLD_ROWS} old items allowed to fit on one page.`);
+                    return;
+                }
                 oldRows.push({ desc: data.desc || '', wt: data.wt || '', purity: data.purity || 100, rate: data.rate || '', val: data.val || '', id: Date.now() });
                 render();
             }
