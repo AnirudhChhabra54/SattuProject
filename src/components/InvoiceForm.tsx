@@ -27,6 +27,8 @@ export default function InvoiceForm() {
     const [estNo, setEstNo] = useState(getNextEstimateNumber);
     const [date] = useState(getTodayString);
     const [printSize, setPrintSize] = useState<'A4' | 'A5'>('A4');
+    const [goldRate, setGoldRate] = useState('');
+    const [silverRate, setSilverRate] = useState('');
 
     const [mainRows, setMainRows] = useState<MainRow[]>([
         { id: Date.now(), desc: '', wt: '', rate: '', misc: '', amt: '' }
@@ -180,6 +182,13 @@ export default function InvoiceForm() {
                         <div className="absolute top-0 right-0 text-sm font-bold">Mob: +91-9897452528</div>
                         <img src="/assets/Logo.png" alt="Prakash Jewellers" className="mx-auto w-24 mb-1" />
                         <p className="text-gray-600 text-sm">Near Thakur Dwara Mandir, Main Market, Deoband</p>
+                        {(goldRate || silverRate) && (
+                            <div className="print-only text-xs text-gray-600 mt-1">
+                                {goldRate && <span>Gold: ₹{goldRate}/g</span>}
+                                {goldRate && silverRate && <span className="mx-2">|</span>}
+                                {silverRate && <span>Silver: ₹{silverRate}/g</span>}
+                            </div>
+                        )}
                     </header>
 
                     <div className="text-center text-amber-600 font-serif text-lg border-y border-amber-300 py-1 mb-2">
@@ -190,25 +199,49 @@ export default function InvoiceForm() {
                     <div className="flex-grow">
 
                         {/* Customer Info */}
-                        <div className="grid grid-cols-2 gap-4 bg-amber-50 p-4 mb-6 border-y border-amber-500">
-                            <div>
-                                <label className="font-bold font-serif">Customer:</label>
-                                <input
-                                    type="text"
-                                    value={custName}
-                                    onChange={(e) => setCustName(e.target.value)}
-                                    className="w-full border-b border-gray-300 bg-transparent p-1 focus:outline-none focus:border-amber-500"
-                                />
-                            </div>
-                            <div className="text-right">
-                                <p><span className="font-bold font-serif">Date:</span> {date}</p>
-                                <div className="flex justify-end items-center gap-2">
-                                    <span className="font-bold font-serif">Estimate No:</span>
+                        <div className="bg-amber-50 p-4 mb-6 border-y border-amber-500">
+                            <div className="grid grid-cols-2 gap-4 mb-2">
+                                <div>
+                                    <label className="font-bold font-serif">Customer:</label>
                                     <input
                                         type="text"
-                                        value={estNo}
-                                        onChange={(e) => setEstNo(e.target.value)}
-                                        className="w-24 text-right bg-transparent focus:outline-none border-b border-transparent focus:border-amber-500 transition-colors"
+                                        value={custName}
+                                        onChange={(e) => setCustName(e.target.value)}
+                                        className="w-full border-b border-gray-300 bg-transparent p-1 focus:outline-none focus:border-amber-500"
+                                    />
+                                </div>
+                                <div className="text-right">
+                                    <p><span className="font-bold font-serif">Date:</span> {date}</p>
+                                    <div className="flex justify-end items-center gap-2">
+                                        <span className="font-bold font-serif">Estimate No:</span>
+                                        <input
+                                            type="text"
+                                            value={estNo}
+                                            onChange={(e) => setEstNo(e.target.value)}
+                                            className="w-24 text-right bg-transparent focus:outline-none border-b border-transparent focus:border-amber-500 transition-colors"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex gap-4 text-xs text-gray-600">
+                                <div className="flex items-center gap-2">
+                                    <label>Gold Rate (₹/g):</label>
+                                    <input
+                                        type="number"
+                                        value={goldRate}
+                                        onChange={(e) => setGoldRate(e.target.value)}
+                                        className="w-20 border-b border-gray-300 bg-transparent p-1 focus:outline-none focus:border-amber-500"
+                                        placeholder="Optional"
+                                    />
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <label>Silver Rate (₹/g):</label>
+                                    <input
+                                        type="number"
+                                        value={silverRate}
+                                        onChange={(e) => setSilverRate(e.target.value)}
+                                        className="w-20 border-b border-gray-300 bg-transparent p-1 focus:outline-none focus:border-amber-500"
+                                        placeholder="Optional"
                                     />
                                 </div>
                             </div>

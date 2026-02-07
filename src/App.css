@@ -472,6 +472,11 @@ table {
   display: inline-block;
 }
 
+/* Print-only utility - hidden on screen, visible in print */
+.print-only {
+  display: none;
+}
+
 /* Print Styles - Flexbox Layout */
 @media print {
   @page {
@@ -489,6 +494,10 @@ table {
   .no-print,
   button {
     display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
   }
 
   .min-h-screen {
