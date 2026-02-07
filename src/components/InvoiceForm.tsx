@@ -24,7 +24,7 @@ function formatCurrency(num: number): string {
 
 export default function InvoiceForm() {
     const [custName, setCustName] = useState('');
-    const [estNo] = useState(getNextEstimateNumber);
+    const [estNo, setEstNo] = useState(getNextEstimateNumber);
     const [date] = useState(getTodayString);
     const [printSize, setPrintSize] = useState<'A4' | 'A5'>('A4');
 
@@ -202,7 +202,15 @@ export default function InvoiceForm() {
                             </div>
                             <div className="text-right">
                                 <p><span className="font-bold font-serif">Date:</span> {date}</p>
-                                <p><span className="font-bold font-serif">Estimate No:</span> {estNo}</p>
+                                <div className="flex justify-end items-center gap-2">
+                                    <span className="font-bold font-serif">Estimate No:</span>
+                                    <input
+                                        type="text"
+                                        value={estNo}
+                                        onChange={(e) => setEstNo(e.target.value)}
+                                        className="w-24 text-right bg-transparent focus:outline-none border-b border-transparent focus:border-amber-500 transition-colors"
+                                    />
+                                </div>
                             </div>
                         </div>
 

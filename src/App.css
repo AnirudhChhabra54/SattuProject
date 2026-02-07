@@ -584,4 +584,10 @@ table {
   .mt-auto {
     margin-top: auto !important;
   }
+
+  /* Hide the delete column (last column) in print */
+  th:last-child,
+  td:last-child {
+    display: none !important;
+  }
 }
