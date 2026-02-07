@@ -124,6 +124,17 @@ export default function InvoiceForm() {
         window.print();
     };
 
+    // Reset function
+    const handleReset = () => {
+        if (confirm('Are you sure you want to clear the entire form?')) {
+            setCustName('');
+            // Reset estimate number logic if needed, but usually keep incrementing
+            // setEstNo(getNextEstimateNumber()); // Optional: force new number
+            setMainRows([{ id: Date.now(), desc: '', wt: '', rate: '', misc: '', amt: '' }]);
+            setOldRows([{ id: Date.now() + 1, desc: '', wt: '', purity: '100', rate: '', val: '' }]);
+        }
+    };
+
     return (
         <div className="min-h-screen bg-gray-100 p-4">
             {/* Controls - hidden during print */}
@@ -142,12 +153,21 @@ export default function InvoiceForm() {
                         A5
                     </button>
                 </div>
-                <button
-                    onClick={handlePrint}
-                    className="bg-amber-600 text-white px-6 py-3 rounded-full font-semibold shadow-lg hover:bg-amber-700 transition flex items-center gap-2"
-                >
-                    🖨️ Print Invoice
-                </button>
+                <div className="flex gap-2">
+                    <button
+                        onClick={handleReset}
+                        className="bg-gray-500 text-white px-4 py-3 rounded-full font-semibold shadow-lg hover:bg-gray-600 transition flex items-center gap-2"
+                        title="Reset Form"
+                    >
+                        🔄 Reset
+                    </button>
+                    <button
+                        onClick={handlePrint}
+                        className="bg-amber-600 text-white px-6 py-3 rounded-full font-semibold shadow-lg hover:bg-amber-700 transition flex items-center gap-2"
+                    >
+                        🖨️ Print Invoice
+                    </button>
+                </div>
             </div>
 
             {/* Invoice Form */}
