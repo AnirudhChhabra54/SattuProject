@@ -35,7 +35,7 @@ export default function InvoiceForm() {
     ]);
 
     const [oldRows, setOldRows] = useState<OldRow[]>([
-        { id: Date.now() + 1, desc: '', wt: '', purity: '100', rate: '', val: '' }
+        { id: Date.now() + 1, desc: '', wt: '', purity: '', rate: '', val: '' }
     ]);
 
     // Add main row
@@ -53,7 +53,7 @@ export default function InvoiceForm() {
             alert(`Maximum ${MAX_OLD_ROWS} old items allowed to fit on one page.`);
             return;
         }
-        setOldRows(prev => [...prev, { id: Date.now(), desc: '', wt: '', purity: '100', rate: '', val: '' }]);
+        setOldRows(prev => [...prev, { id: Date.now(), desc: '', wt: '', purity: '', rate: '', val: '' }]);
     }, [oldRows.length]);
 
     // Update main row
@@ -133,7 +133,7 @@ export default function InvoiceForm() {
             // Reset estimate number logic if needed, but usually keep incrementing
             // setEstNo(getNextEstimateNumber()); // Optional: force new number
             setMainRows([{ id: Date.now(), desc: '', wt: '', rate: '', misc: '', amt: '' }]);
-            setOldRows([{ id: Date.now() + 1, desc: '', wt: '', purity: '100', rate: '', val: '' }]);
+            setOldRows([{ id: Date.now() + 1, desc: '', wt: '', purity: '', rate: '', val: '' }]);
         }
     };
 
@@ -182,13 +182,6 @@ export default function InvoiceForm() {
                         <div className="absolute top-0 right-0 text-sm font-bold">Mob: +91-9897452528</div>
                         <img src="/assets/Logo.png" alt="Prakash Jewellers" className="mx-auto w-24 mb-1" />
                         <p className="text-gray-600 text-sm">Near Thakur Dwara Mandir, Main Market, Deoband</p>
-                        {(goldRate || silverRate) && (
-                            <div className="print-only text-xs text-black mt-1">
-                                {goldRate && <span>Gold: ₹{goldRate}/10g</span>}
-                                {goldRate && silverRate && <span className="mx-2">|</span>}
-                                {silverRate && <span>Silver: ₹{silverRate}/10g</span>}
-                            </div>
-                        )}
                     </header>
 
                     <div className="text-center text-amber-600 font-serif text-lg border-y border-amber-300 py-1 mb-2">
@@ -388,6 +381,14 @@ export default function InvoiceForm() {
                         <button onClick={addOldRow} className="w-full border border-dashed border-red-200 py-2 text-red-400 hover:border-red-400 hover:text-red-500 mb-6">
                             + Add Old Gold Row
                         </button>
+
+                        {/* Gold/Silver Rates Display - Print Only */}
+                        {(goldRate || silverRate) && (
+                            <div className="print-only text-xs text-black text-center mb-4 p-2 border-t border-gray-300">
+                                {goldRate && <span className="mr-4">Gold Rate: ₹{goldRate}/10g</span>}
+                                {silverRate && <span>Silver Rate: ₹{silverRate}/10g</span>}
+                            </div>
+                        )}
 
                     </div> {/* End of flex-grow content */}
 
