@@ -480,7 +480,7 @@ table {
 /* Print Styles - Flexbox Layout */
 @media print {
   @page {
-    margin: 0;
+    margin: 0mm;
     size: auto;
     /* Let content dictate, or use JS to trigger specific @page if needed (not standard) */
   }
@@ -523,6 +523,7 @@ table {
     /* Strict dimensions */
     box-sizing: border-box;
     overflow: hidden;
+    page-break-inside: avoid;
   }
 
   /* Flex structure */
@@ -542,13 +543,13 @@ table {
   /* A4 Specifics */
   .print-a4 {
     width: 210mm !important;
-    height: 297mm !important;
+    height: 275mm !important;
   }
 
   /* A5 Specifics */
   .print-a5 {
     width: 148mm !important;
-    height: 210mm !important;
+    height: 190mm !important;
     font-size: 0.8rem !important;
     /* Scale down text slightly */
   }
