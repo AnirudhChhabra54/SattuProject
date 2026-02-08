@@ -223,7 +223,7 @@ export default function InvoiceForm() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="flex gap-4 text-xs text-gray-600">
+                            <div className="flex gap-4 text-xs text-gray-600 no-print">
                                 <div className="flex items-center gap-2">
                                     <label>Gold Rate (₹/10g):</label>
                                     <input
