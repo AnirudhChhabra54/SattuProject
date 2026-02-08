@@ -579,10 +579,20 @@ table {
 
 
   /* Common Print Resets */
+  * {
+    color: black !important;
+  }
+
   input {
     border: none !important;
     background: transparent !important;
     padding: 0 !important;
+    color: black !important;
+  }
+
+  input::placeholder {
+    color: transparent !important;
+    opacity: 0 !important;
   }
 
   /* Hide dashed borders (add row areas) */

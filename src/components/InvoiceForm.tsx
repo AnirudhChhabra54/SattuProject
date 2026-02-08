@@ -183,10 +183,10 @@ export default function InvoiceForm() {
                         <img src="/assets/Logo.png" alt="Prakash Jewellers" className="mx-auto w-24 mb-1" />
                         <p className="text-gray-600 text-sm">Near Thakur Dwara Mandir, Main Market, Deoband</p>
                         {(goldRate || silverRate) && (
-                            <div className="print-only text-xs text-gray-600 mt-1">
-                                {goldRate && <span>Gold: ₹{goldRate}/g</span>}
+                            <div className="print-only text-xs text-black mt-1">
+                                {goldRate && <span>Gold: ₹{goldRate}/10g</span>}
                                 {goldRate && silverRate && <span className="mx-2">|</span>}
-                                {silverRate && <span>Silver: ₹{silverRate}/g</span>}
+                                {silverRate && <span>Silver: ₹{silverRate}/10g</span>}
                             </div>
                         )}
                     </header>
@@ -225,7 +225,7 @@ export default function InvoiceForm() {
                             </div>
                             <div className="flex gap-4 text-xs text-gray-600">
                                 <div className="flex items-center gap-2">
-                                    <label>Gold Rate (₹/g):</label>
+                                    <label>Gold Rate (₹/10g):</label>
                                     <input
                                         type="number"
                                         value={goldRate}
@@ -235,7 +235,7 @@ export default function InvoiceForm() {
                                     />
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <label>Silver Rate (₹/g):</label>
+                                    <label>Silver Rate (₹/10g):</label>
                                     <input
                                         type="number"
                                         value={silverRate}
