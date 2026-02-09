@@ -59,6 +59,7 @@ export default function InvoiceForm() {
     const [printSize, setPrintSize] = useState<'A4' | 'A5'>('A4');
     const [goldRate, setGoldRate] = useState('');
     const [silverRate, setSilverRate] = useState('');
+    const [narration, setNarration] = useState('');
 
     const [mainRows, setMainRows] = useState<MainRow[]>([
         { id: Date.now(), desc: '', wt: '', rate: '', misc: '', amt: '' }
@@ -143,14 +144,6 @@ export default function InvoiceForm() {
     const oldTotal = oldRows.reduce((sum, r) => sum + (parseFloat(r.val) || 0), 0);
     const grandTotal = subtotal - oldTotal;
 
-    // Check if old items have content
-    const hasOldItems = oldRows.some(r => {
-        const desc = (r.desc || '').trim();
-        const wt = parseFloat(r.wt) || 0;
-        const val = parseFloat(r.val) || 0;
-        return desc.length > 0 || wt > 0 || val > 0;
-    });
-
     // Print function
     const handlePrint = () => {
         window.print();
@@ -209,7 +202,7 @@ export default function InvoiceForm() {
 
                     {/* Header */}
                     <header className="text-center mb-2 relative">
-                        <div className="absolute top-0 right-0 text-sm font-bold">Mob: +91-9897452528</div>
+                        <div className="absolute top-0 right-0 text-sm font-bold print-gold"><span className="print-gold">Mob:</span> +91-9897452528</div>
                         <img src="/assets/Logo.png" alt="Prakash Jewellers" className="mx-auto w-24 mb-1" />
                         <p className="text-gray-600 text-sm">Near Thakur Dwara Mandir, Main Market, Deoband</p>
                     </header>
@@ -225,7 +218,7 @@ export default function InvoiceForm() {
                         <div className="bg-amber-50 p-4 mb-6 border-y border-amber-500">
                             <div className="grid grid-cols-2 gap-4 mb-2">
                                 <div>
-                                    <label className="font-bold font-serif">Customer:</label>
+                                    <label className="font-bold font-serif print-gold">Customer:</label>
                                     <input
                                         type="text"
                                         value={custName}
@@ -234,7 +227,7 @@ export default function InvoiceForm() {
                                     />
                                 </div>
                                 <div className="text-right">
-                                    <p><span className="font-bold font-serif">Date:</span> {date}</p>
+                                    <p><span className="font-bold font-serif print-gold">Date:</span> {date}</p>
                                     <div className="flex justify-end items-center gap-2">
                                         <span className="font-bold font-serif">Estimate No:</span>
                                         <input
@@ -336,6 +329,11 @@ export default function InvoiceForm() {
                                         </td>
                                     </tr>
                                 ))}
+                                {/* Total Row */}
+                                <tr className="bg-amber-50 print-only">
+                                    <td colSpan={4} className="border p-2 text-right font-bold">Total</td>
+                                    <td className="border p-2 text-center font-bold">₹{formatCurrency(subtotal)}</td>
+                                </tr>
                             </tbody>
                         </table>
                         <button onClick={addMainRow} className="w-full border border-dashed border-gray-300 py-2 text-gray-500 hover:border-amber-500 hover:text-amber-600 mb-6">
@@ -412,56 +410,59 @@ export default function InvoiceForm() {
                             + Add Old Gold Row
                         </button>
 
-                        {/* Gold/Silver Rates Display - Print Only */}
-                        {(goldRate || silverRate) && (
-                            <div className="print-only text-xs text-black text-center mb-4 p-2 border-t border-gray-300">
-                                {goldRate && <span className="mr-4">Gold Rate: ₹{goldRate}/10g</span>}
-                                {silverRate && <span>Silver Rate: ₹{silverRate}/10g</span>}
+                        {/* Gold Rate Display - Print Only */}
+                        {goldRate && (
+                            <div className="print-only text-sm text-right mb-2 print-gold">
+                                Gold: ₹{goldRate}/10g
                             </div>
                         )}
+
+                        {/* Narration Section */}
+                        <div className="mb-4">
+                            <label className="font-bold font-serif print-gold">Narration:</label>
+                            <textarea
+                                value={narration}
+                                onChange={(e) => setNarration(e.target.value)}
+                                className="w-full border border-gray-300 rounded p-2 mt-1 text-sm no-print"
+                                placeholder="Enter remarks or special instructions..."
+                                rows={2}
+                            />
+                            {narration && (
+                                <div className="print-only text-sm mt-1">
+                                    <span className="print-gold font-bold">Narration:</span> {narration}
+                                </div>
+                            )}
+                        </div>
 
                     </div> {/* End of flex-grow content */}
 
                     {/* Footer Section (Sticks to bottom) */}
                     <div className="mt-auto pt-2 footer-section">
-                        {/* Calculations */}
-                        <div className="flex justify-end mb-2">
-                            <div className="w-64 border border-amber-500 rounded overflow-hidden text-sm">
-                                <div className="flex justify-between p-2 bg-amber-50">
-                                    <span>Subtotal</span>
-                                    <span>₹ {formatCurrency(subtotal)}</span>
+                        {/* Main Footer Row: QR Code Left, Total Right */}
+                        <div className="flex justify-between items-start mb-4">
+                            {/* QR Code Placeholder */}
+                            <div className="w-24 h-24 border border-gray-300 flex items-center justify-center text-xs text-gray-400">
+                                <img src="/assets/qr-placeholder.png" alt="QR Code" className="w-full h-full object-contain" onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.parentElement!.innerHTML = 'QR Code'; }} />
+                            </div>
+
+                            {/* To Be Paid Section */}
+                            <div className="text-right">
+                                <div className="text-xl font-bold print-gold mb-1">
+                                    <span className="print-gold">To Be Paid:</span> <span className="print-gold">₹{formatCurrency(grandTotal)}</span>
                                 </div>
-                                {hasOldItems && (
-                                    <div className="flex justify-between p-2 border-t">
-                                        <span>Old Items Deduction</span>
-                                        <span>₹ {formatCurrency(oldTotal)}</span>
+                                <div className="text-xs italic">
+                                    {numberToWords(Math.round(grandTotal))} rupees only
+                                </div>
+                                {silverRate && (
+                                    <div className="text-sm mt-2 print-gold">
+                                        Silver: ₹{silverRate}/10g
                                     </div>
                                 )}
-                                <div className="flex justify-between p-2 bg-gradient-to-r from-amber-100 to-amber-50 font-bold font-serif text-base border-t-2 border-black">
-                                    <span>Total</span>
-                                    <span>₹ {formatCurrency(grandTotal)}</span>
-                                </div>
                             </div>
                         </div>
 
-                        {/* Amount in Words - Print Only */}
-                        <div className="print-only text-xs italic text-center mt-2">
-                            <strong>Amount in Words:</strong> Rupees {numberToWords(Math.round(grandTotal))} Only
-                        </div>
-
-                        {/* Footer Auth & Terms */}
-                        <div className="flex justify-between items-end pt-2 border-t border-dashed border-gray-400">
-                            <div>
-                                <img src="/assets/Insta_page_logo.png" alt="Instagram" className="w-24" />
-                            </div>
-                            <div className="text-right">
-                                <div className="w-40 border-t border-gray-600 mb-1 inline-block"></div>
-                                <p className="font-serif font-semibold text-sm">Authorized Signature</p>
-                            </div>
-                        </div>
-
-                        {/* Terms */}
-                        <div className="bg-amber-50 p-2 rounded mt-2 text-xs">
+                        {/* Terms - with dashed border */}
+                        <div className="border-t-2 border-dashed border-gray-400 pt-2 text-xs">
                             <ul className="list-disc pl-4 space-y-0.5">
                                 <li>सामान बदलने की सुविधा केवल 3 दिनों तक ही उपलब्ध है।</li>
                                 <li>इसके बाद वापसी केवल 85% मूल्य पर स्वीकार की जाएगी।</li>
@@ -469,7 +470,8 @@ export default function InvoiceForm() {
                             </ul>
                         </div>
 
-                        <div className="text-center mt-2 py-1 border-t border-b border-gray-200 font-serif text-base">
+                        {/* Thank you */}
+                        <div className="text-center mt-3 py-1 font-serif text-base print-gold">
                             Thank you for visiting 🙏
                         </div>
                     </div> {/* End of Footer Section */}

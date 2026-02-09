@@ -580,8 +580,16 @@ table {
 
   /* Common Print Resets */
   * {
-    color: black !important;
     font-family: Cambria, Georgia, 'Times New Roman', serif !important;
+  }
+
+  /* Golden accent color for labels */
+  .print-gold {
+    color: #c5a065 !important;
+  }
+
+  .print-black {
+    color: black !important;
   }
 
   input {
@@ -612,11 +620,14 @@ table {
     display: none !important;
   }
 
-  /* Table header styling */
+  /* Table header styling - amber/golden */
   th {
-    background-color: #f2f2f2 !important;
+    background-color: #fef3c7 !important;
     font-weight: bold !important;
     padding: 8px !important;
+    color: black !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
   /* Footer separator */
