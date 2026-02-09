@@ -18,6 +18,36 @@ function getTodayString(): string {
     return `${String(d.getDate()).padStart(2, '0')}-${String(d.getMonth() + 1).padStart(2, '0')}-${d.getFullYear()}`;
 }
 
+// Convert number to words (Indian numbering system)
+function numberToWords(num: number): string {
+    if (num === 0) return 'Zero';
+
+    const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+    const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+    const teens = ['Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+
+    function convertLessThanThousand(n: number): string {
+        if (n === 0) return '';
+        if (n < 10) return ones[n];
+        if (n < 20) return teens[n - 10];
+        if (n < 100) return tens[Math.floor(n / 10)] + (n % 10 > 0 ? ' ' + ones[n % 10] : '');
+        return ones[Math.floor(n / 100)] + ' Hundred' + (n % 100 > 0 ? ' ' + convertLessThanThousand(n % 100) : '');
+    }
+
+    const crore = Math.floor(num / 10000000);
+    const lakh = Math.floor((num % 10000000) / 100000);
+    const thousand = Math.floor((num % 100000) / 1000);
+    const remainder = num % 1000;
+
+    let result = '';
+    if (crore > 0) result += convertLessThanThousand(crore) + ' Crore ';
+    if (lakh > 0) result += convertLessThanThousand(lakh) + ' Lakh ';
+    if (thousand > 0) result += convertLessThanThousand(thousand) + ' Thousand ';
+    if (remainder > 0) result += convertLessThanThousand(remainder);
+
+    return result.trim();
+}
+
 function formatCurrency(num: number): string {
     return Math.round(num).toLocaleString('en-IN');
 }
@@ -393,7 +423,7 @@ export default function InvoiceForm() {
                     </div> {/* End of flex-grow content */}
 
                     {/* Footer Section (Sticks to bottom) */}
-                    <div className="mt-auto pt-2">
+                    <div className="mt-auto pt-2 footer-section">
                         {/* Calculations */}
                         <div className="flex justify-end mb-2">
                             <div className="w-64 border border-amber-500 rounded overflow-hidden text-sm">
@@ -412,6 +442,11 @@ export default function InvoiceForm() {
                                     <span>₹ {formatCurrency(grandTotal)}</span>
                                 </div>
                             </div>
+                        </div>
+
+                        {/* Amount in Words - Print Only */}
+                        <div className="print-only text-xs italic text-center mt-2">
+                            <strong>Amount in Words:</strong> Rupees {numberToWords(Math.round(grandTotal))} Only
                         </div>
 
                         {/* Footer Auth & Terms */}

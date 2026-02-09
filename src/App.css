@@ -581,6 +581,7 @@ table {
   /* Common Print Resets */
   * {
     color: black !important;
+    font-family: Cambria, Georgia, 'Times New Roman', serif !important;
   }
 
   input {
@@ -609,5 +610,19 @@ table {
   th:last-child,
   td:last-child {
     display: none !important;
+  }
+
+  /* Table header styling */
+  th {
+    background-color: #f2f2f2 !important;
+    font-weight: bold !important;
+    padding: 8px !important;
+  }
+
+  /* Footer separator */
+  .footer-section {
+    border-top: 2px dashed #999 !important;
+    padding-top: 10px !important;
+    margin-top: 10px !important;
   }
 }
