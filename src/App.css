@@ -531,7 +531,7 @@ table {
     display: flex !important;
     flex-direction: column !important;
     height: 100% !important;
-    border: 3px double #c5a065 !important;
+    border: 3px solid #000 !important;
     padding: 10mm !important;
     box-sizing: border-box !important;
   }
@@ -580,12 +580,13 @@ table {
 
   /* Common Print Resets */
   * {
+    color: black !important;
     font-family: Cambria, Georgia, 'Times New Roman', serif !important;
   }
 
-  /* Golden accent color for labels */
+  /* Override golden accents to black in print */
   .print-gold {
-    color: #c5a065 !important;
+    color: black !important;
   }
 
   .print-black {
@@ -620,14 +621,25 @@ table {
     display: none !important;
   }
 
-  /* Table header styling - amber/golden */
+  /* Table header styling - B&W */
   th {
-    background-color: #fef3c7 !important;
+    background-color: #e5e5e5 !important;
     font-weight: bold !important;
     padding: 8px !important;
     color: black !important;
+    border: 2px solid #000 !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
+  }
+
+  /* Table cell borders - thick */
+  td {
+    border: 1.5px solid #000 !important;
+  }
+
+  /* Table outer border */
+  table {
+    border: 2px solid #000 !important;
   }
 
   /* Footer separator */
