@@ -647,5 +647,14 @@ table {
     border-top: 2px dashed #999 !important;
     padding-top: 10px !important;
     margin-top: 10px !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Keep entire invoice on one page */
+  #printable-invoice,
+  .invoice-container {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
   }
 }
