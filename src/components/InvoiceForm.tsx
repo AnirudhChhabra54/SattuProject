@@ -208,9 +208,7 @@ export default function InvoiceForm() {
                         <p className="text-gray-600 text-sm">Near Thakur Dwara Mandir, Main Market, Deoband</p>
                     </header>
 
-                    <div className="text-center font-serif text-lg border-y border-gray-400 py-1 mb-2" style={{ letterSpacing: '2px', fontWeight: 'bold' }}>
-                        [ Rough Estimate ]
-                    </div>
+
 
                     {/* Content Body (Grows to push footer down) */}
                     <div className="flex-grow">
@@ -265,9 +263,7 @@ export default function InvoiceForm() {
                         </div>
 
                         {/* Main Items Table */}
-                        <div className="bg-gray-100 px-4 py-2 font-bold font-serif border-l-4 border-amber-500 mb-4">
-                            Estimate
-                        </div>
+
                         <table className="w-full border-collapse border-2 border-amber-500 mb-2">
                             <thead>
                                 <tr className="bg-amber-100">
@@ -342,9 +338,7 @@ export default function InvoiceForm() {
                         </button>
 
                         {/* Old Items */}
-                        <div className="bg-red-50 px-4 py-2 font-bold font-serif border-l-4 border-red-500 mb-4">
-                            Old Items Deduction
-                        </div>
+                        <div className="text-sm font-bold font-serif mb-2 mt-4">Old Items Return</div>
                         <table className="w-full border-collapse border-2 border-amber-500 mb-2">
                             <thead>
                                 <tr className="bg-amber-100">
