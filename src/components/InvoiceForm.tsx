@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { QRCodeSVG } from 'qrcode.react';
 import type { MainRow, OldRow } from '../types/invoice';
 
 const MAX_MAIN_ROWS = 8;
@@ -202,13 +203,13 @@ export default function InvoiceForm() {
 
                     {/* Header */}
                     <header className="text-center mb-2 relative">
-                        <div className="absolute top-0 right-0 text-sm font-bold print-gold"><span className="print-gold">Mob:</span> +91-9897452528</div>
+                        <div className="absolute top-0 right-0 text-sm font-bold">Mob: +91-9897452528</div>
                         <img src="/assets/Logo.png" alt="Prakash Jewellers" className="mx-auto w-24 mb-1" />
                         <p className="text-gray-600 text-sm">Near Thakur Dwara Mandir, Main Market, Deoband</p>
                     </header>
 
-                    <div className="text-center text-amber-600 font-serif text-lg border-y border-amber-300 py-1 mb-2">
-                        Rough Estimate
+                    <div className="text-center font-serif text-lg border-y border-gray-400 py-1 mb-2" style={{ letterSpacing: '2px', fontWeight: 'bold' }}>
+                        [ Rough Estimate ]
                     </div>
 
                     {/* Content Body (Grows to push footer down) */}
@@ -218,7 +219,7 @@ export default function InvoiceForm() {
                         <div className="bg-amber-50 p-4 mb-6 border-y border-amber-500">
                             <div className="grid grid-cols-2 gap-4 mb-2">
                                 <div>
-                                    <label className="font-bold font-serif print-gold">Customer:</label>
+                                    <label className="font-bold font-serif">Customer:</label>
                                     <input
                                         type="text"
                                         value={custName}
@@ -227,7 +228,7 @@ export default function InvoiceForm() {
                                     />
                                 </div>
                                 <div className="text-right">
-                                    <p><span className="font-bold font-serif print-gold">Date:</span> {date}</p>
+                                    <p><span className="font-bold font-serif">Date:</span> {date}</p>
                                     <div className="flex justify-end items-center gap-2">
                                         <span className="font-bold font-serif">Estimate No:</span>
                                         <input
@@ -412,14 +413,14 @@ export default function InvoiceForm() {
 
                         {/* Gold Rate Display - Print Only */}
                         {goldRate && (
-                            <div className="print-only text-sm text-right mb-2 print-gold">
+                            <div className="print-only text-sm text-right mb-2">
                                 Gold: ₹{goldRate}/10g
                             </div>
                         )}
 
                         {/* Narration Section */}
                         <div className="mb-4">
-                            <label className="font-bold font-serif print-gold">Narration:</label>
+                            <label className="font-bold font-serif">Narration:</label>
                             <textarea
                                 value={narration}
                                 onChange={(e) => setNarration(e.target.value)}
@@ -429,7 +430,7 @@ export default function InvoiceForm() {
                             />
                             {narration && (
                                 <div className="print-only text-sm mt-1">
-                                    <span className="print-gold font-bold">Narration:</span> {narration}
+                                    <span className="font-bold">Narration:</span> {narration}
                                 </div>
                             )}
                         </div>
@@ -438,26 +439,53 @@ export default function InvoiceForm() {
 
                     {/* Footer Section (Sticks to bottom) */}
                     <div className="mt-auto pt-2 footer-section">
-                        {/* Main Footer Row: QR Code Left, Total Right */}
-                        <div className="flex justify-between items-start mb-4">
-                            {/* QR Code Placeholder */}
-                            <div className="w-24 h-24 border border-gray-300 flex items-center justify-center text-xs text-gray-400">
-                                <img src="/assets/qr-placeholder.png" alt="QR Code" className="w-full h-full object-contain" onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.parentElement!.innerHTML = 'QR Code'; }} />
-                            </div>
-
-                            {/* To Be Paid Section */}
-                            <div className="text-right">
-                                <div className="text-xl font-bold print-gold mb-1">
-                                    <span className="print-gold">To Be Paid:</span> <span className="print-gold">₹{formatCurrency(grandTotal)}</span>
+                        {/* To Be Paid Box */}
+                        <div className="flex justify-end mb-3">
+                            <div style={{ minWidth: '260px' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 8px', borderBottom: '1px solid #ccc', fontSize: '13px' }}>
+                                    <span>Subtotal</span>
+                                    <span>₹{formatCurrency(subtotal)}</span>
                                 </div>
-                                <div className="text-xs italic">
-                                    {numberToWords(Math.round(grandTotal))} rupees only
-                                </div>
-                                {silverRate && (
-                                    <div className="text-sm mt-2 print-gold">
-                                        Silver: ₹{silverRate}/10g
+                                {oldTotal > 0 && (
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 8px', borderBottom: '1px solid #ccc', fontSize: '13px' }}>
+                                        <span>Less: Old Return</span>
+                                        <span>- ₹{formatCurrency(oldTotal)}</span>
                                     </div>
                                 )}
+                                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 8px', fontWeight: 'bold', fontSize: '16px', borderTop: '2px solid #000', borderBottom: '2px solid #000', background: '#f5f5f5' }}>
+                                    <span>To Be Paid</span>
+                                    <span>₹{formatCurrency(grandTotal)}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Amount in Words */}
+                        <div style={{ textAlign: 'right', fontSize: '12px', fontStyle: 'italic', marginBottom: '12px' }}>
+                            {numberToWords(Math.round(grandTotal))} rupees only
+                        </div>
+
+                        {/* QR Code + Rates + Signature Row */}
+                        <div className="flex justify-between items-end" style={{ marginBottom: '12px' }}>
+                            {/* QR Code */}
+                            <div style={{ textAlign: 'center' }}>
+                                <QRCodeSVG
+                                    value="https://www.instagram.com/prakash_jewellers_deoband/"
+                                    size={80}
+                                    level="M"
+                                />
+                                <div style={{ fontSize: '9px', marginTop: '2px' }}>Scan for Instagram</div>
+                            </div>
+
+                            {/* Rates */}
+                            <div style={{ textAlign: 'center', fontSize: '12px' }}>
+                                {goldRate && <div>Gold: ₹{goldRate}/10g</div>}
+                                {silverRate && <div>Silver: ₹{silverRate}/10g</div>}
+                            </div>
+
+                            {/* Authorized Signature */}
+                            <div style={{ textAlign: 'center' }}>
+                                <div style={{ width: '140px', borderBottom: '1px solid #000', marginBottom: '4px' }}>&nbsp;</div>
+                                <div style={{ fontSize: '11px', fontWeight: 'bold' }}>Authorized Signature</div>
                             </div>
                         </div>
 
@@ -471,7 +499,7 @@ export default function InvoiceForm() {
                         </div>
 
                         {/* Thank you */}
-                        <div className="text-center mt-3 py-1 font-serif text-base print-gold">
+                        <div className="text-center mt-3 py-1 font-serif text-base">
                             Thank you for visiting 🙏
                         </div>
                     </div> {/* End of Footer Section */}
