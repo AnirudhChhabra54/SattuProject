@@ -464,7 +464,7 @@ export default function InvoiceForm() {
                             <div style={{ textAlign: 'center' }}>
                                 <QRCodeSVG
                                     value="https://www.instagram.com/prakash_jewellers_deoband/"
-                                    size={80}
+                                    size={60}
                                     level="M"
                                 />
                                 <div style={{ fontSize: '9px', marginTop: '2px' }}>Scan for Instagram</div>
