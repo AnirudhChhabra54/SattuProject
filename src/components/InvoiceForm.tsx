@@ -326,11 +326,6 @@ export default function InvoiceForm() {
                                         </td>
                                     </tr>
                                 ))}
-                                {/* Total Row */}
-                                <tr className="bg-amber-50 print-only">
-                                    <td colSpan={4} className="border p-2 text-right font-bold">Total</td>
-                                    <td className="border p-2 text-center font-bold">₹{formatCurrency(subtotal)}</td>
-                                </tr>
                             </tbody>
                         </table>
                         <button onClick={addMainRow} className="w-full border border-dashed border-gray-300 py-2 text-gray-500 hover:border-amber-500 hover:text-amber-600 mb-6">
