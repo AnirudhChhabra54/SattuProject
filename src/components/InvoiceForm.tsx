@@ -145,6 +145,14 @@ export default function InvoiceForm() {
     const oldTotal = oldRows.reduce((sum, r) => sum + (parseFloat(r.val) || 0), 0);
     const grandTotal = subtotal - oldTotal;
 
+    // Check if old items have actual content
+    const hasOldItems = oldRows.some(r => {
+        const desc = (r.desc || '').trim();
+        const wt = parseFloat(r.wt) || 0;
+        const val = parseFloat(r.val) || 0;
+        return desc.length > 0 || wt > 0 || val > 0;
+    });
+
     // Print function
     const handlePrint = () => {
         window.print();
@@ -203,7 +211,7 @@ export default function InvoiceForm() {
 
                     {/* Header */}
                     <header className="text-center mb-2 relative">
-                        <div className="absolute top-0 right-0 text-sm font-bold">Mob: +91-9897452528</div>
+                        <div className="absolute top-0 right-0 text-xs" style={{ fontFamily: 'Georgia, serif', letterSpacing: '0.5px' }}>Mob: +91-9897452528</div>
                         <img src="/assets/Logo.png" alt="Prakash Jewellers" className="mx-auto w-24 mb-1" />
                         <p className="text-gray-600 text-sm">Near Thakur Dwara Mandir, Main Market, Deoband</p>
                     </header>
@@ -214,7 +222,7 @@ export default function InvoiceForm() {
                     <div className="flex-grow">
 
                         {/* Customer Info */}
-                        <div className="bg-amber-50 p-4 mb-6 border-y border-amber-500">
+                        <div className="p-4 mb-4 border-y border-gray-400">
                             <div className="grid grid-cols-2 gap-4 mb-2">
                                 <div>
                                     <label className="font-bold font-serif">Customer:</label>
@@ -222,7 +230,7 @@ export default function InvoiceForm() {
                                         type="text"
                                         value={custName}
                                         onChange={(e) => setCustName(e.target.value)}
-                                        className="w-full border-b border-gray-300 bg-transparent p-1 focus:outline-none focus:border-amber-500"
+                                        className="w-full border-b border-gray-300 bg-transparent p-1 focus:outline-none focus:border-gray-500"
                                     />
                                 </div>
                                 <div className="text-right">
@@ -233,7 +241,7 @@ export default function InvoiceForm() {
                                             type="text"
                                             value={estNo}
                                             onChange={(e) => setEstNo(e.target.value)}
-                                            className="w-24 text-right bg-transparent focus:outline-none border-b border-transparent focus:border-amber-500 transition-colors"
+                                            className="w-24 text-right bg-transparent focus:outline-none border-b border-transparent focus:border-gray-500 transition-colors"
                                         />
                                     </div>
                                 </div>
@@ -245,7 +253,7 @@ export default function InvoiceForm() {
                                         type="number"
                                         value={goldRate}
                                         onChange={(e) => setGoldRate(e.target.value)}
-                                        className="w-20 border-b border-gray-300 bg-transparent p-1 focus:outline-none focus:border-amber-500"
+                                        className="w-20 border-b border-gray-300 bg-transparent p-1 focus:outline-none focus:border-gray-500"
                                         placeholder="Optional"
                                     />
                                 </div>
@@ -255,7 +263,7 @@ export default function InvoiceForm() {
                                         type="number"
                                         value={silverRate}
                                         onChange={(e) => setSilverRate(e.target.value)}
-                                        className="w-20 border-b border-gray-300 bg-transparent p-1 focus:outline-none focus:border-amber-500"
+                                        className="w-20 border-b border-gray-300 bg-transparent p-1 focus:outline-none focus:border-gray-500"
                                         placeholder="Optional"
                                     />
                                 </div>
@@ -264,10 +272,10 @@ export default function InvoiceForm() {
 
                         {/* Main Items Table */}
 
-                        <table className="w-full border-collapse border-2 border-amber-500 mb-2">
+                        <table className="w-full border-collapse border-2 border-gray-400 mb-2">
                             <thead>
-                                <tr className="bg-amber-100">
-                                    <th className="border p-2 text-sm">#</th>
+                                <tr className="bg-gray-100">
+                                    <th className="border p-2 text-sm">Item</th>
                                     <th className="border p-2 text-sm">Description</th>
                                     <th className="border p-2 text-sm">Weight (g)</th>
                                     <th className="border p-2 text-sm">Rate</th>
@@ -328,77 +336,79 @@ export default function InvoiceForm() {
                                 ))}
                             </tbody>
                         </table>
-                        <button onClick={addMainRow} className="w-full border border-dashed border-gray-300 py-2 text-gray-500 hover:border-amber-500 hover:text-amber-600 mb-6">
+                        <button onClick={addMainRow} className="w-full border border-dashed border-gray-300 py-2 text-gray-500 hover:border-gray-500 hover:text-gray-600 mb-4">
                             + Add Item Row
                         </button>
 
-                        {/* Old Items */}
-                        <div className="text-sm font-bold font-serif mb-2 mt-4">Old Items Return</div>
-                        <table className="w-full border-collapse border-2 border-amber-500 mb-2">
-                            <thead>
-                                <tr className="bg-amber-100">
-                                    <th className="border p-2 text-sm">Description</th>
-                                    <th className="border p-2 text-sm">Weight (g)</th>
-                                    <th className="border p-2 text-sm">Purity %</th>
-                                    <th className="border p-2 text-sm">Rate</th>
-                                    <th className="border p-2 text-sm">Value (₹)</th>
-                                    <th className="border p-2 text-sm w-10"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {oldRows.map((row) => (
-                                    <tr key={row.id}>
-                                        <td className="border p-1">
-                                            <input
-                                                type="text"
-                                                value={row.desc}
-                                                onChange={(e) => updateOldRow(row.id, 'desc', e.target.value)}
-                                                className="w-full bg-transparent text-left"
-                                                placeholder="Old Item"
-                                            />
-                                        </td>
-                                        <td className="border p-1">
-                                            <input
-                                                type="number"
-                                                value={row.wt}
-                                                onChange={(e) => updateOldRow(row.id, 'wt', e.target.value)}
-                                                className="w-full bg-transparent text-center"
-                                            />
-                                        </td>
-                                        <td className="border p-1">
-                                            <input
-                                                type="number"
-                                                value={row.purity}
-                                                onChange={(e) => updateOldRow(row.id, 'purity', e.target.value)}
-                                                className="w-full bg-transparent text-center"
-                                            />
-                                        </td>
-                                        <td className="border p-1">
-                                            <input
-                                                type="number"
-                                                value={row.rate}
-                                                onChange={(e) => updateOldRow(row.id, 'rate', e.target.value)}
-                                                className="w-full bg-transparent text-center"
-                                            />
-                                        </td>
-                                        <td className="border p-1">
-                                            <input
-                                                type="number"
-                                                value={row.val}
-                                                onChange={(e) => updateOldRow(row.id, 'val', e.target.value)}
-                                                className="w-full bg-transparent text-center font-semibold text-red-600"
-                                            />
-                                        </td>
-                                        <td className="border p-1 text-center">
-                                            <button onClick={() => deleteOldRow(row.id)} className="text-red-500 hover:text-red-700">✕</button>
-                                        </td>
+                        {/* Old Items - only show in print if items exist */}
+                        <div className={!hasOldItems ? 'no-print-old' : ''}>
+                            <div className="text-sm font-bold font-serif mb-2 mt-4">Old Items Return</div>
+                            <table className="w-full border-collapse border-2 border-gray-400 mb-2">
+                                <thead>
+                                    <tr className="bg-gray-100">
+                                        <th className="border p-2 text-sm">Description</th>
+                                        <th className="border p-2 text-sm">Weight (g)</th>
+                                        <th className="border p-2 text-sm">Purity %</th>
+                                        <th className="border p-2 text-sm">Rate</th>
+                                        <th className="border p-2 text-sm">Value (₹)</th>
+                                        <th className="border p-2 text-sm w-10"></th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                        <button onClick={addOldRow} className="w-full border border-dashed border-red-200 py-2 text-red-400 hover:border-red-400 hover:text-red-500 mb-6">
-                            + Add Old Gold Row
-                        </button>
+                                </thead>
+                                <tbody>
+                                    {oldRows.map((row) => (
+                                        <tr key={row.id}>
+                                            <td className="border p-1">
+                                                <input
+                                                    type="text"
+                                                    value={row.desc}
+                                                    onChange={(e) => updateOldRow(row.id, 'desc', e.target.value)}
+                                                    className="w-full bg-transparent text-left"
+                                                    placeholder="Old Item"
+                                                />
+                                            </td>
+                                            <td className="border p-1">
+                                                <input
+                                                    type="number"
+                                                    value={row.wt}
+                                                    onChange={(e) => updateOldRow(row.id, 'wt', e.target.value)}
+                                                    className="w-full bg-transparent text-center"
+                                                />
+                                            </td>
+                                            <td className="border p-1">
+                                                <input
+                                                    type="number"
+                                                    value={row.purity}
+                                                    onChange={(e) => updateOldRow(row.id, 'purity', e.target.value)}
+                                                    className="w-full bg-transparent text-center"
+                                                />
+                                            </td>
+                                            <td className="border p-1">
+                                                <input
+                                                    type="number"
+                                                    value={row.rate}
+                                                    onChange={(e) => updateOldRow(row.id, 'rate', e.target.value)}
+                                                    className="w-full bg-transparent text-center"
+                                                />
+                                            </td>
+                                            <td className="border p-1">
+                                                <input
+                                                    type="number"
+                                                    value={row.val}
+                                                    onChange={(e) => updateOldRow(row.id, 'val', e.target.value)}
+                                                    className="w-full bg-transparent text-center font-semibold text-red-600"
+                                                />
+                                            </td>
+                                            <td className="border p-1 text-center">
+                                                <button onClick={() => deleteOldRow(row.id)} className="text-red-500 hover:text-red-700">✕</button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                            <button onClick={addOldRow} className="w-full border border-dashed border-gray-300 py-2 text-gray-400 hover:border-gray-500 hover:text-gray-600 mb-4">
+                                + Add Old Gold Row
+                            </button>
+                        </div> {/* End old items conditional wrapper */}
 
                         {/* Gold Rate Display - Print Only */}
                         {goldRate && (

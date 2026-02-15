@@ -500,6 +500,11 @@ table {
     display: block !important;
   }
 
+  /* Hide old items section when empty */
+  .no-print-old {
+    display: none !important;
+  }
+
   .min-h-screen {
     min-height: 100vh !important;
     height: 100vh !important;
