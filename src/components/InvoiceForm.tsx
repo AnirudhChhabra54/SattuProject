@@ -212,7 +212,7 @@ export default function InvoiceForm() {
                     {/* Header */}
                     <header className="text-center mb-2 relative">
                         <div className="absolute top-0 right-0 mob-number">Mob: +91-9897452528</div>
-                        <img src="/assets/Logo.png" alt="Prakash Jewellers" className="mx-auto w-20 mb-1" />
+                        <img src="/assets/Logo.png" alt="Prakash Jewellers" className="mx-auto w-14 mb-1" />
                         <p className="text-gray-600 text-xs italic">Near Thakur Dwara Mandir, Main Market, Deoband</p>
                     </header>
 
