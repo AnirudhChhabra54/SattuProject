@@ -524,9 +524,7 @@ table {
     background: white !important;
     border: none !important;
     box-sizing: border-box;
-    overflow: hidden !important;
     page-break-inside: avoid;
-    max-height: 100vh !important;
   }
 
   /* Flex structure */
@@ -534,11 +532,9 @@ table {
     display: flex !important;
     flex-direction: column !important;
     height: 100% !important;
-    max-height: 100vh !important;
     border: 3px solid #000 !important;
     padding: 6mm !important;
     box-sizing: border-box !important;
-    overflow: hidden !important;
   }
 
   .flex-grow {
@@ -704,6 +700,5 @@ table {
   .invoice-container {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
-    overflow: hidden !important;
   }
 }
