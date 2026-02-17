@@ -740,7 +740,7 @@ table {
 
   /* Ensure terms list is compact and visible in print */
   ul.list-disc li {
-    font-size: 12px !important;
+    font-size: 14px !important;
     line-height: 1.4 !important;
     color: black !important;
     list-style-type: disc !important;
