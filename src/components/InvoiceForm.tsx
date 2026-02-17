@@ -211,9 +211,9 @@ export default function InvoiceForm() {
 
                     {/* Header */}
                     <header className="text-center mb-2 relative">
-                        <div className="absolute top-0 right-0 text-xs" style={{ fontFamily: 'Georgia, serif', letterSpacing: '0.5px' }}>Mob: +91-9897452528</div>
-                        <img src="/assets/Logo.png" alt="Prakash Jewellers" className="mx-auto w-24 mb-1" />
-                        <p className="text-gray-600 text-sm">Near Thakur Dwara Mandir, Main Market, Deoband</p>
+                        <div className="absolute top-0 right-0 mob-number">Mob: +91-9897452528</div>
+                        <img src="/assets/Logo.png" alt="Prakash Jewellers" className="mx-auto w-20 mb-1" />
+                        <p className="text-gray-600 text-xs italic">Near Thakur Dwara Mandir, Main Market, Deoband</p>
                     </header>
 
 
@@ -275,19 +275,19 @@ export default function InvoiceForm() {
                         <table className="w-full border-collapse border-2 border-gray-400 mb-2">
                             <thead>
                                 <tr className="bg-gray-100">
-                                    <th className="border p-2 text-sm">Item</th>
-                                    <th className="border p-2 text-sm">Description</th>
-                                    <th className="border p-2 text-sm">Weight (g)</th>
-                                    <th className="border p-2 text-sm">Rate</th>
-                                    <th className="border p-2 text-sm">Misc</th>
-                                    <th className="border p-2 text-sm">Amount (₹)</th>
-                                    <th className="border p-2 text-sm w-10"></th>
+                                    <th className="border p-1 text-center w-8">Item</th>
+                                    <th className="border p-1 text-left">Description</th>
+                                    <th className="border p-1 text-center w-16">Weight (g)</th>
+                                    <th className="border p-1 text-center w-16">Rate</th>
+                                    <th className="border p-1 text-center w-16">Misc</th>
+                                    <th className="border p-1 text-center w-20">Amount (₹)</th>
+                                    <th className="border p-1 text-center w-8 no-print"></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {mainRows.map((row, idx) => (
                                     <tr key={row.id}>
-                                        <td className="border p-1 text-center text-gray-400">{idx + 1}</td>
+                                        <td className="border p-1 text-center font-bold">{idx + 1}</td>
                                         <td className="border p-1">
                                             <input
                                                 type="text"
@@ -323,13 +323,13 @@ export default function InvoiceForm() {
                                         </td>
                                         <td className="border p-1">
                                             <input
-                                                type="number"
-                                                value={row.amt}
-                                                onChange={(e) => updateMainRow(row.id, 'amt', e.target.value)}
+                                                type="text"
+                                                value={isNaN(parseFloat(row.amt)) ? '' : row.amt}
+                                                readOnly
                                                 className="w-full bg-transparent text-center font-semibold"
                                             />
                                         </td>
-                                        <td className="border p-1 text-center">
+                                        <td className="border p-1 text-center no-print">
                                             <button onClick={() => deleteMainRow(row.id)} className="text-red-500 hover:text-red-700">✕</button>
                                         </td>
                                     </tr>
@@ -346,12 +346,12 @@ export default function InvoiceForm() {
                             <table className="w-full border-collapse border-2 border-gray-400 mb-2">
                                 <thead>
                                     <tr className="bg-gray-100">
-                                        <th className="border p-2 text-sm">Description</th>
-                                        <th className="border p-2 text-sm">Weight (g)</th>
-                                        <th className="border p-2 text-sm">Purity %</th>
-                                        <th className="border p-2 text-sm">Rate</th>
-                                        <th className="border p-2 text-sm">Value (₹)</th>
-                                        <th className="border p-2 text-sm w-10"></th>
+                                        <th className="border p-1 text-left">Description</th>
+                                        <th className="border p-1 text-center w-16">Weight (g)</th>
+                                        <th className="border p-1 text-center w-16">Purity %</th>
+                                        <th className="border p-1 text-center w-16">Rate</th>
+                                        <th className="border p-1 text-center w-20">Value (₹)</th>
+                                        <th className="border p-1 text-center w-8 no-print"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
