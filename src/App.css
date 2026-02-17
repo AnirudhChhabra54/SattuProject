@@ -587,7 +587,7 @@ table {
   /* Common Print Resets */
   * {
     color: black !important;
-    font-family: Cambria, Georgia, 'Times New Roman', serif !important;
+    font-family: 'Nirmala UI', 'Mangal', 'Arial Unicode MS', Cambria, Georgia, serif !important;
     font-size: 11px !important;
     line-height: 1.3 !important;
   }
@@ -690,10 +690,12 @@ table {
     margin-bottom: 4px !important;
   }
 
-  /* Ensure terms list is compact in print */
+  /* Ensure terms list is compact and visible in print */
   ul.list-disc li {
-    font-size: 9px !important;
-    line-height: 1.1 !important;
+    font-size: 10px !important;
+    line-height: 1.4 !important;
+    color: black !important;
+    list-style-type: disc !important;
   }
 
   /* Footer separator */
