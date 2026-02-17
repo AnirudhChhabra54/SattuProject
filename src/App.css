@@ -535,9 +535,11 @@ table {
     display: flex;
     justify-content: center;
     align-items: flex-start;
+    overflow: hidden !important;
+    /* Prevent second page */
   }
 
-  /* Base Printable Invoice - Auto Scaling */
+  /* Base Printable Invoice - Scale to fit */
   #printable-invoice {
     margin: 0 !important;
     padding: 0 !important;
@@ -545,9 +547,9 @@ table {
     border: none !important;
     box-sizing: border-box;
     width: 100% !important;
-    height: 100% !important;
-    overflow: visible !important;
-    /* Allow content to flow */
+    transform: scale(0.88) !important;
+    /* Scale down to fit one page */
+    transform-origin: top left !important;
   }
 
   /* Main Container */
@@ -555,14 +557,9 @@ table {
     display: flex !important;
     flex-direction: column !important;
     border: 2px solid #000 !important;
-    /* Thinner professional border */
-    padding: 4mm !important;
-    /* Optimal padding */
+    padding: 5mm !important;
     box-sizing: border-box !important;
-    min-height: 98vh !important;
-    /* Use almost full height */
     justify-content: space-between;
-    /* push footer to bottom */
   }
 
   .flex-grow {
