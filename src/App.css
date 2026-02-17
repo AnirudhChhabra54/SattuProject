@@ -489,6 +489,8 @@ table {
     background: white !important;
     margin: 0 !important;
     padding: 0 !important;
+    padding-bottom: 10mm !important;
+    /* Ensure space at bottom */
   }
 
   .no-print,
@@ -531,7 +533,9 @@ table {
   .invoice-container {
     display: flex !important;
     flex-direction: column !important;
-    height: 100% !important;
+    height: auto !important;
+    /* Allow growth */
+    min-height: 100% !important;
     border: 3px solid #000 !important;
     padding: 6mm !important;
     box-sizing: border-box !important;
@@ -684,6 +688,12 @@ table {
   table {
     border: 2px solid #000 !important;
     margin-bottom: 4px !important;
+  }
+
+  /* Ensure terms list is compact in print */
+  ul.list-disc li {
+    font-size: 9px !important;
+    line-height: 1.1 !important;
   }
 
   /* Footer separator */
