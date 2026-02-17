@@ -463,6 +463,15 @@ export default function InvoiceForm() {
                             {numberToWords(Math.round(grandTotal))} rupees only
                         </div>
 
+                        {/* Terms - Moved up for visibility */}
+                        <div className="border-t-2 border-dashed border-gray-400 pt-1 text-xs mb-2">
+                            <ul className="list-disc pl-4 space-y-0.5">
+                                <li>सामान बदलने की सुविधा केवल 3 दिनों तक ही उपलब्ध है।</li>
+                                <li>इसके बाद वापसी केवल 85% मूल्य पर स्वीकार की जाएगी।</li>
+                                <li>लोंग एवं छोटी बाली 75% की ही आती है।</li>
+                            </ul>
+                        </div>
+
                         {/* QR Code + Rates + Signature Row */}
                         <div className="flex justify-between items-end" style={{ marginBottom: '6px' }}>
                             {/* QR Code */}
@@ -488,14 +497,7 @@ export default function InvoiceForm() {
                             </div>
                         </div>
 
-                        {/* Terms - with dashed border */}
-                        <div className="border-t-2 border-dashed border-gray-400 pt-1 text-xs">
-                            <ul className="list-disc pl-4 space-y-0.5">
-                                <li>सामान बदलने की सुविधा केवल 3 दिनों तक ही उपलब्ध है।</li>
-                                <li>इसके बाद वापसी केवल 85% मूल्य पर स्वीकार की जाएगी।</li>
-                                <li>लोंग एवं छोटी बाली 75% की ही आती है।</li>
-                            </ul>
-                        </div>
+
 
                         {/* Thank you */}
                         <div className="text-center mt-1 py-1 font-serif text-sm">
